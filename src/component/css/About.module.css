@@ -1,0 +1,78 @@
+.aboutContainer {
+  max-width: 700px;
+  margin: 60px auto 80px;
+  padding: 0 5%;
+}
+
+.aboutTitle {
+  font-family: var(--font-serif-title);
+  font-size: 42px;
+  margin-bottom: 40px;
+  text-align: center;
+  color: var(--text-dark);
+  letter-spacing: -1px;
+}
+
+.aboutContent {
+  font-family: var(--font-serif-body);
+  font-size: 18px;
+  line-height: 1.8;
+  color: var(--text-medium);
+}
+
+.aboutContent p {
+  margin-bottom: 24px;
+}
+
+.contactCard {
+  margin-top: 60px;
+  padding: 40px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  text-align: center;
+}
+
+.contactCard h2 {
+  font-family: var(--font-serif-title);
+  font-size: 32px;
+  margin-bottom: 16px;
+  color: var(--text-dark);
+}
+
+.contactCard p {
+  margin-bottom: 24px;
+}
+
+.email {
+  display: inline-block;
+  padding: 12px 24px;
+  background-color: var(--bg-cream);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  color: var(--text-dark);
+  font-size: 16px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+@media (max-width: 768px) {
+  .aboutContainer {
+    margin: 40px auto 60px;
+    padding: 0 6%;
+  }
+
+  .aboutTitle {
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+
+  .aboutContent {
+    font-size: 16px;
+  }
+  
+  .contactCard {
+    padding: 24px;
+  }
+}

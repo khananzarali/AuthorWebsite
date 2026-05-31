@@ -1,0 +1,70 @@
+:root {
+
+  --bg-cream: #F8F5F2; /* slightly cooler off-white */
+  --bg-white: #FFFFFF;
+  --text-dark: #1A1A1A; /* deeper black */
+  --text-medium: #4A4A4A;
+  --text-light: #888888;
+  --accent-gold: #D4AF37; /* more vibrant gold */
+  --border-color: #E5E0D8;
+  --link-hover: #D4AF37;
+
+  --font-serif-body: 'Crimson Text', Georgia, serif;
+  --font-serif-title: 'Cinzel', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 40px;
+  --spacing-xl: 60px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--bg-cream);
+  color: var(--text-dark);
+  font-family: var(--font-serif-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: var(--text-dark);
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif-title);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+}
+
+@media (max-width: 768px) {
+  :root {
+    --spacing-lg: 24px;
+    --spacing-xl: 40px;
+  }
+}

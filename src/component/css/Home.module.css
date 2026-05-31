@@ -1,0 +1,232 @@
+.heroSection {
+  display: flex;
+  align-items: center;
+  gap: 60px;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 0 5%;
+}
+
+.textColumn {
+  flex: 1.2;
+}
+
+.imageColumn {
+  flex: 1;
+}
+
+.imageColumn img {
+  max-width: 100%;
+  height: auto;
+  max-height: 600px;
+  display: block;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15); /* deeper, richer shadow */
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.imageColumn img:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+.textColumn h1 {
+  font-family: var(--font-serif-title);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-dark);
+  margin-bottom: 24px;
+  letter-spacing: -1px;
+}
+
+.textColumn p {
+  font-family: var(--font-serif-body);
+  font-size: 20px;
+  margin-bottom: 32px;
+  color: var(--text-medium);
+  line-height: 1.6;
+}
+
+.expectedDate {
+  font-family: var(--font-serif-body);
+  font-size: 16px;
+  color: var(--text-medium);
+  margin-bottom: 24px;
+}
+
+.ctaButton {
+  padding: 14px 32px;
+  background-color: var(--accent-gold); /* use accent gold instead of dark */
+  color: #fff;
+  border: 1px solid var(--accent-gold);
+  border-radius: 30px;
+  font-family: var(--font-serif-body);
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+}
+
+.ctaButton:hover {
+  background-color: var(--text-dark);
+  border-color: var(--text-dark);
+  color: #fff;
+  box-shadow: 0 6px 20px rgba(26, 26, 26, 0.4);
+}
+
+/* Updates Section */
+.updatesSection {
+  max-width: 800px;
+  margin: 100px auto;
+  padding: 0 5%;
+}
+
+.updatesHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.updatesHeader h2 {
+  font-family: var(--font-serif-title);
+  font-size: 32px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.updatesHeader p {
+  font-family: var(--font-serif-body);
+  font-size: 16px;
+  color: var(--text-medium);
+}
+
+.divider {
+  width: 60px;
+  height: 3px;
+  background-color: var(--accent-gold);
+  border: none;
+  margin: 16px auto 24px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 24px;
+  padding: 24px;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.timelineItem:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+.timelineDate {
+  font-family: var(--font-serif-body);
+  font-size: 14px;
+  color: var(--text-light);
+  min-width: 120px;
+  padding-top: 4px;
+}
+
+.timelineContent {
+  flex: 1;
+}
+
+.timelineContent h3 {
+  font-family: var(--font-serif-title);
+  font-size: 22px;
+  margin-bottom: 8px;
+  color: var(--text-dark);
+}
+
+.tag {
+  display: inline-block;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  background-color: var(--border-color);
+  color: var(--text-medium);
+  margin-bottom: 12px;
+}
+
+.timelineContent p {
+  font-family: var(--font-serif-body);
+  font-size: 16px;
+  color: var(--text-medium);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.updateLink {
+  color: var(--text-dark);
+}
+.updateLink:hover{
+  color: black;
+}
+
+.readMore {
+  font-family: var(--font-serif-body);
+  font-size: 14px;
+  color: var(--text-medium);
+  transition: color 0.2s ease;
+}
+
+.readMore:hover {
+  color: var(--text-dark);
+}
+
+@media (max-width: 900px) {
+  .heroSection {
+    flex-direction: column;
+    gap: 40px;
+    margin: 60px auto;
+    text-align: center;
+  }
+
+  .textColumn h1 {
+    font-size: 42px;
+  }
+
+  .textColumn p {
+    font-size: 18px;
+  }
+
+  .imageColumn img {
+    max-height: 300px;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    margin: 40px auto 30px;
+    padding: 0 6%;
+  }
+
+  .textColumn h1 {
+    font-size: 32px;
+  }
+
+  .updatesSection {
+    margin: 60px auto;
+    padding: 0 6%;
+  }
+
+  .timelineItem {
+    flex-direction: column;
+    gap: 8px;
+  }
+}

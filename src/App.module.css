@@ -1,0 +1,107 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 5%;
+  border-bottom: 1px solid var(--border-color);
+  background-color: rgba(248, 245, 242, 0.85); /* transparent cream */
+  backdrop-filter: blur(12px); /* glassmorphism effect */
+  -webkit-backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.siteName {
+  font-family: var(--font-serif-title);
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  color: var(--text-dark);
+}
+.siteName:hover{
+  font-weight: bolder;
+  letter-spacing: -0.3px;
+}
+
+.navLinks {
+  display: flex;
+  gap: 32px;
+  font-family: var(--font-serif-body);
+  font-size: 15px;
+}
+
+.navLinks a {
+  position: relative;
+  padding: 4px 0;
+}
+
+.navLinks a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--text-dark);
+  transition: width 0.3s ease;
+}
+
+.navLinks a:hover::after {
+  width: 100%;
+}
+
+.mainContent {
+  min-height: calc(100vh - 180px);
+}
+
+/* --- Center the Footer Content --- */
+.footer {
+  display: flex;
+  justify-content: center; /* This is the magic line that centers it horizontally! */
+  align-items: center;
+  padding: 20px 20px;
+  margin-top: 60px;
+  border-top: 1px solid var(--border-color);
+}
+
+/* --- Space out the three icons --- */
+.socialIcons {
+  display: flex;
+  gap: 10px; /* The distance between your three icons */
+}
+
+/* --- Style the icons & add a hover lift --- */
+.socialLink {
+  color: black; /* Starts faded */
+  display: flex; /* Keeps the SVG perfectly aligned inside the link */
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.socialLink:hover {
+  color: var(--accent-gold); /* Turns gold on hover */
+  transform: translateY(-4px); /* Gentle lift effect */
+}
+
+.authorName {
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 5%;
+  }
+
+  .navLinks {
+    gap: 20px;
+    font-size: 14px;
+  }
+
+  .footer {
+    padding: 30px 20px;
+    margin-top: 40px;
+  }
+}

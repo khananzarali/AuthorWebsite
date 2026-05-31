@@ -1,0 +1,32 @@
+.recommendationsContainer {
+  max-width: 700px;
+  margin: 60px auto 80px;
+  padding: 0 5%;
+  text-align: center;
+}
+
+.pageTitle {
+  font-family: var(--font-serif-title);
+  font-size: 42px;
+  margin-bottom: 40px;
+  color: var(--text-dark);
+  letter-spacing: -1px;
+}
+
+.comingSoon {
+  font-family: var(--font-serif-body);
+  font-size: 18px;
+  color: var(--text-medium);
+  font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .recommendationsContainer {
+    margin: 40px auto 60px;
+    padding: 0 6%;
+  }
+
+  .pageTitle {
+    font-size: 32px;
+  }
+}

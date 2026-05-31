@@ -1,0 +1,145 @@
+/* --- Global --- */
+html {
+    scroll-behavior: smooth;
+}
+
+/* --- The Progress Bar --- */
+.progressBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 5px;
+    background-color: var(--text-dark, #2C2C2C);
+    z-index: 1000;
+    transition: width 0.1s ease-out;
+}
+
+/* --- Layout Wrapper (The Fix) --- */
+.pageLayout {
+    display: flex;
+    justify-content: space-between;
+    /* align-items: flex-start ensures the sidebar only takes up as much height as it needs, allowing sticky to work */
+    align-items: flex-start; 
+    gap: 60px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 5% 80px 5%;
+}
+
+/* --- The Main Reader --- */
+.readerContainer {
+    flex: 1;
+    max-width: 800px;
+}
+
+/* --- The Index Sidebar (Right) --- */
+.sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 60px; /* How far from the top of the screen it sticks */
+}
+
+/* --- Index Styling (Matched to your image) --- */
+.indexBox {
+    /* Creates the solid line on the left side of the index */
+    border-left: 2px solid #ccc;
+    padding-left: 20px;
+}
+
+.indexTitle {
+    font-family: var(--font-serif-body, sans-serif);
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--text-dark, #2C2C2C);
+    margin-bottom: 20px;
+}
+
+.indexList {
+    list-style: none; /* Removes bullet points */
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Nice spacing between links */
+}
+
+/* Turn the button into a plain text link visually */
+.indexLink {
+    background: none;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: var(--font-serif-body, sans-serif);
+    font-size: 15px;
+    color: #555;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.indexLink:hover {
+    color: var(--text-dark, #000);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+/* Responsive: Move index below content on small mobile screens */
+@media (max-width: 900px) {
+    .pageLayout {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        position: static;
+        border-left: none;
+        border-top: 2px solid #ccc;
+        padding-top: 20px;
+        padding-left: 0;
+        margin-top: 40px;
+    }
+}
+
+/* --- Standard Reader Styles --- */
+.backLink {
+    display: inline-block;
+    font-family: var(--font-serif-body, 'Cormorant Garamond', serif);
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 40px;
+    transition: color 0.2s ease;
+}
+
+.backLink:hover {
+    color: var(--text-dark, #2C2C2C);
+}
+
+.title {
+    font-family: var(--font-serif-title, 'Playfair Display', serif);
+    font-size: 42px;
+    margin-bottom: 40px;
+    color: var(--text-dark, #2C2C2C);
+    line-height: 1.2;
+}
+
+.markdownContent {
+    font-family: var(--font-serif-body, 'Cormorant Garamond', serif);
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--text-dark, #2C2C2C);
+}
+
+.markdownContent h2, .markdownContent h3 {
+    margin-top: 40px;
+    margin-bottom: 15px;
+}
+
+.loading {
+    font-style: italic;
+    color: #666;
+}
+
+.notFound {
+    text-align: center;
+    padding: 100px 20px;
+    font-family: var(--font-serif-body, 'Cormorant Garamond', serif);
+}
