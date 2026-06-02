@@ -1,16 +1,56 @@
-# React + Vite
+# Anzar Ali Khan - Author Website
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Personal website for author Anzar Ali Khan, featuring upcoming works, short stories, and updates.
 
-Currently, two official plugins are available:
+## 🚀 Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 19** - UI library
+- **Vite** - Build tool and dev server
+- **React Router** - Client-side routing
+- **Framer Motion** - Animations
+- **React Markdown** - Markdown rendering for stories
 
-## React Compiler
+## 📦 Installation
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```bash
+npm install
+```
 
-## Expanding the ESLint configuration
+## 🛠️ Development
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm run dev
+```
+
+## 🔍 Linting
+
+```bash
+npm run lint
+```
+
+## 🏗️ Build
+
+```bash
+npm run build
+```
+
+## 📁 Project Structure
+
+```
+src/
+├── component/
+│   ├── About.jsx
+│   ├── Home.jsx
+│   ├── StoryReader.jsx
+│   └── Writings.jsx
+├── data/
+│   └── updates.js
+└── App.jsx
+```
+
+## 📖 Features
+
+- **Home** - Featured book showcase and timeline of updates
+- **Writings** - Collection of short stories
+- **About** - Author biography
+- **Story Reader** - Dynamic route for reading stories and updates
