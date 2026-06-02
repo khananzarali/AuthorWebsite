@@ -44,6 +44,7 @@ src/
 │   ├── StoryReader.jsx
 │   └── Writings.jsx
 ├── data/
+|───|── stories.js
 │   └── updates.js
 └── App.jsx
 ```
