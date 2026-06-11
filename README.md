@@ -26,10 +26,11 @@ I have heavily customized and improved the website to ensure it feels dynamic, p
 - Securely integrates with the **Google Books API** to fetch top-tier fantasy and magic novels.
 - **Smart Rotation & Caching:** The algorithm uses the current date to guarantee a fresh recommendation exactly once every 24 hours. The result is cached locally in the browser (`localStorage`), ensuring zero-latency loads on subsequent visits and heavily reducing unnecessary API requests.
 
-### 4. 📝 Integrated Markdown Reader
-- Utilizes `react-markdown` to seamlessly convert local `.md` files into beautifully styled reading experiences.
-- Includes a dynamic sidebar with an automatically generated **Table of Contents** for easy navigation through chapters and updates.
-- Clicking **"Learn More"** on the homepage elegantly routes the user to a detailed synopsis of *Heaven Behind The Mountain Pass*, keeping the user inside the seamless Single Page Application ecosystem.
+### 4. ☁️ Firebase Firestore & View Tracking
+- **Cloud Database:** Stories and timeline updates are now fetched dynamically from a Firebase Firestore database, making content management robust and scalable.
+- **Integrated Markdown Reader:** Utilizes `react-markdown` to seamlessly render the rich text content pulled from Firestore into beautifully styled reading experiences.
+- **Live View Counts:** Each story features an automated view tracker that increments in the cloud and displays live view counts dynamically across the site.
+- **Dynamic Navigation:** Includes an automatically generated **Table of Contents** sidebar for easy navigation through long chapters.
 
 ---
 
@@ -40,7 +41,7 @@ I have heavily customized and improved the website to ensure it feels dynamic, p
 - **Styling:** Vanilla CSS (CSS Modules)
 - **Animations:** Framer Motion
 - **Markdown Parsing:** React Markdown
-
+- **Database & Backend:** Firebase Firestore
 ---
 
 ## 🚀 Running Locally
@@ -53,10 +54,20 @@ Make sure you have Node.js installed, then run:
 npm install
 ```
 
-### 2. Set Up Environment Variables (API Key)
-To enable the Google Books Recommendation feature, create a file named `.env` in the root of the project and add your API key:
+### 2. Set Up Environment Variables
+Create a file named `.env.local` in the root of the project and add your API keys. You will need your Google Books API key for recommendations, and your Firebase credentials for the database and view tracking:
+
 ```env
-VITE_GOOGLE_BOOKS_API_KEY=your_actual_api_key_here
+VITE_GOOGLE_BOOKS_API_KEY=your_actual_google_books_api_key_here
+
+# Firebase Configuration
+VITE_FIREBASE_API_KEY=your_api_key
+VITE_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
+VITE_FIREBASE_PROJECT_ID=your_project_id
+VITE_FIREBASE_STORAGE_BUCKET=your_project.firebasestorage.app
+VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+VITE_FIREBASE_APP_ID=your_app_id
+VITE_FIREBASE_MEASUREMENT_ID=your_measurement_id
 ```
 
 ### 3. Start the Development Server

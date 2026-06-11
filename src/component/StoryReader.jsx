@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { motion } from "framer-motion";
-import { storiesData } from "../data/stories"; 
-import { updatesData } from "../data/updates"; 
+import { doc, getDoc, updateDoc, increment } from "firebase/firestore";
+import { db } from "../firebase";
 import styles from "./css/StoryReader.module.css";
 
 const generateSlug = (text) => {
@@ -12,47 +12,60 @@ const generateSlug = (text) => {
 
 const StoryReader = ({ type }) => {
   const { id } = useParams(); 
+  const [item, setItem] = useState(null);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
   const [progress, setProgress] = useState(0);
   const [headings, setHeadings] = useState([]);
+  const [error, setError] = useState(null);
 
-  // 1. Determine which data array to use based on the 'type' prop
-  const dataSource = type === "story" ? storiesData : updatesData;
-  const item = dataSource.find((s) => s.id === parseInt(id));
-
-  // 2. Set up dynamic UI text based on what we are reading
   const backLinkPath = type === "story" ? "/writings" : "/";
   const backLinkText = type === "story" ? "← Back to Library" : "← Back to Home";
-  const notFoundText = type === "story" ? "Story not found" : "Update not found";
 
   useEffect(() => {
-    if (item) {
+    const fetchContent = async () => {
       window.scrollTo(0, 0); 
-      setLoading(true); // Reset loading when switching items
+      setLoading(true);
+      setError(null);
       
-      fetch(item.fileName)
-        .then((response) => response.text())
-        .then((text) => {
-          setContent(text);
-          setLoading(false);
+      const collectionName = type === "story" ? "stories" : "updates";
+      const docRef = doc(db, collectionName, String(id));
+      
+      try {
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          setItem(data);
+          setContent(data.content || "");
           
-          const headingMatches = Array.from(text.matchAll(/^(#{2,3})\s+(.*?)\s*$/gm));
-          const extractedHeadings = headingMatches.map((match) => ({
-            level: match[1].length,
-            text: match[2],
-            slug: generateSlug(match[2])
-          }));
-          
-          setHeadings(extractedHeadings);
-        })
-        .catch((error) => {
-          console.error(`Error loading ${type}:`, error);
-          setContent("Sorry, this manuscript could not be found.");
-          setLoading(false);
-        });
-    }
-  }, [id, item, type]);
+          // Increment views
+          await updateDoc(docRef, {
+            views: increment(1)
+          });
+
+          // Extract headings for sidebar
+          if (data.content) {
+            const headingMatches = Array.from(data.content.matchAll(/^(#{2,3})\s+(.*?)\s*$/gm));
+            const extractedHeadings = headingMatches.map((match) => ({
+              level: match[1].length,
+              text: match[2],
+              slug: generateSlug(match[2])
+            }));
+            setHeadings(extractedHeadings);
+          }
+        } else {
+          setError(`This ${type} could not be found.`);
+        }
+      } catch (err) {
+        console.error("Error fetching document:", err);
+        setError("Error loading content. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchContent();
+  }, [id, type]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -88,10 +101,10 @@ const StoryReader = ({ type }) => {
     )
   };
 
-  if (!item) {
+  if (error) {
     return (
       <div className={styles.notFound}>
-        <h2>{notFoundText}</h2>
+        <h2>{error}</h2>
         <Link to={backLinkPath}>{backLinkText}</Link>
       </div>
     );
@@ -108,27 +121,27 @@ const StoryReader = ({ type }) => {
       <div className={styles.pageLayout}>
         <div className={styles.readerContainer}>
           
-
           <Link to={backLinkPath} className={styles.backLink}>
             {backLinkText}
           </Link>
           
-          <h1 className={styles.title}>{item.title}</h1>
-
-          {type === "update" && item.date && (
-            <p style={{ fontStyle: "italic", marginBottom: "30px", color: "#666" }}>
-              Posted on {item.date}
-            </p>
-          )}
-          
           {loading ? (
             <p className={styles.loading}>Loading manuscript...</p>
           ) : (
-            <div className={styles.markdownContent}>
-              <ReactMarkdown components={customRenderers}>
-                {content}
-              </ReactMarkdown>
-            </div>
+            <>
+              <h1 className={styles.title}>{item?.title}</h1>
+              
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "30px", color: "#666", fontStyle: "italic" }}>
+                <span>{type === "update" && item?.date ? `Posted on ${item.date}` : ""}</span>
+                <span>{item?.views ? `${item.views} views` : ""}</span>
+              </div>
+
+              <div className={styles.markdownContent}>
+                <ReactMarkdown components={customRenderers}>
+                  {content}
+                </ReactMarkdown>
+              </div>
+            </>
           )}
         </div>
 

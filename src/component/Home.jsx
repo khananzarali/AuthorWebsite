@@ -1,7 +1,9 @@
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom"; 
 import { motion } from "framer-motion";
+import { collection, getDocs, query, orderBy } from "firebase/firestore";
+import { db } from "../firebase";
 import styles from "./css/Home.module.css"; 
-import { updatesData } from "../data/updates"; 
 
 // Animation variants
 const containerVariants = {
@@ -29,6 +31,27 @@ const itemVariants = {
 
 const Home = () => {
     const navigate = useNavigate();
+    const [updatesData, setUpdatesData] = useState([]);
+
+    useEffect(() => {
+        const fetchUpdates = async () => {
+            try {
+                // You can add orderBy("date", "desc") if date is properly formatted, 
+                // but since they are strings like "October 12, 2026", sorting by id or fetching as is works for now.
+                const querySnapshot = await getDocs(collection(db, "updates"));
+                const updatesList = querySnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                // Sort by ID descending to keep newest at top
+                updatesList.sort((a, b) => b.id - a.id);
+                setUpdatesData(updatesList);
+            } catch (e) {
+                console.error("Error fetching updates: ", e);
+            }
+        };
+        fetchUpdates();
+    }, []);
 
     return (
         <motion.div initial="hidden" animate="visible" variants={containerVariants}>

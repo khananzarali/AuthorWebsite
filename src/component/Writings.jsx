@@ -1,6 +1,8 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { storiesData } from "../data/stories";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
 import styles from './css/Writings.module.css'; 
 
 const containerVariants = {
@@ -21,9 +23,34 @@ const itemVariants = {
 };
 
 const Writings = () => {
-  const books = storiesData.filter(story => story.type === "book");
-  const shortStories = storiesData.filter(story => story.type === "short story");
-  const articles = storiesData.filter(story => story.type === "article");
+  const [stories, setStories] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStories = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "stories"));
+        const storiesList = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setStories(storiesList);
+      } catch (e) {
+        console.error("Error fetching stories: ", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStories();
+  }, []);
+
+  const books = stories.filter(story => story.type === "book");
+  const shortStories = stories.filter(story => story.type === "short story");
+  const articles = stories.filter(story => story.type === "article");
+
+  if (loading) {
+    return <div style={{ padding: "100px 20px", textAlign: "center", color: "white" }}>Loading library...</div>;
+  }
 
   return (
     <motion.div 
@@ -43,7 +70,7 @@ const Writings = () => {
                 <Link to={`/story/${story.id}`} className={styles.storyLink}>
                   {story.title}
                 </Link>
-                {story.meta && <span className={styles.metaText}>{story.meta}</span>}
+                {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
@@ -59,7 +86,7 @@ const Writings = () => {
                 <Link to={`/story/${story.id}`} className={styles.storyLink}>
                   {story.title}
                 </Link>
-                {story.meta && <span className={styles.metaText}>{story.meta}</span>}
+                {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
@@ -75,7 +102,7 @@ const Writings = () => {
                 <Link to={`/story/${story.id}`} className={styles.storyLink}>
                   {story.title}
                 </Link>
-                {story.meta && <span className={styles.metaText}>{story.meta}</span>}
+                {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
