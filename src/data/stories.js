@@ -3,7 +3,7 @@ export const storiesData = [
     id: 1, 
     title: "Heaven Behind The Mountain Pass", 
     meta: "2026", 
-    fileName: "/Story.md", 
+    fileName: "/MountainPass.md", 
     tags: ["fantasy", "adventure"], 
     type: "book" 
   },

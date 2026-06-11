@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom"; 
+import { Link, useNavigate } from "react-router-dom"; 
 import { motion } from "framer-motion";
 import styles from "./css/Home.module.css"; 
 import { updatesData } from "../data/updates"; 
@@ -28,6 +28,8 @@ const itemVariants = {
 };
 
 const Home = () => {
+    const navigate = useNavigate();
+
     return (
         <motion.div initial="hidden" animate="visible" variants={containerVariants}>
             <section className={styles.heroSection}>
@@ -36,12 +38,13 @@ const Home = () => {
                 </motion.div>
                 <motion.div className={styles.textColumn} variants={itemVariants}>
                     <h1>Heaven Behind The Mountain Pass</h1>
-                    <p>An adventure story set in the Mountains of Kashmir about the...</p>
+                    <p>An adventure story set in the Mountains of Kashmir about the quiet corners of magic, the importance of found family, and learning to love ourselves.</p>
                     <p className={styles.expectedDate}><strong>Expected Date:</strong> December 2027</p>
                     <motion.button 
                         className={styles.ctaButton}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
+                        onClick={() => navigate('/story/1')}
                     >
                         Learn More
                     </motion.button>

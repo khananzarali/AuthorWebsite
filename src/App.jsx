@@ -14,6 +14,7 @@ const App = () => {
         <nav className={styles.navLinks}>
           <Link to="/">Home</Link>
           <Link to="/writings">Writings</Link>
+          <Link to="/recommendations">Recommendations</Link>
           <Link to="/about">About</Link>
         </nav>
       </header>
