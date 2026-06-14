@@ -26,6 +26,13 @@ const Writings = () => {
   const [stories, setStories] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Prefetch markdown file on hover
+  const prefetchFile = (fileName) => {
+    if (fileName) {
+      fetch(fileName).catch(() => {});
+    }
+  };
+
   useEffect(() => {
     const fetchStories = async () => {
       try {
@@ -44,13 +51,20 @@ const Writings = () => {
     fetchStories();
   }, []);
 
-  const books = stories.filter(story => story.type === "book");
-  const shortStories = stories.filter(story => story.type === "short story");
-  const articles = stories.filter(story => story.type === "article");
+  const books = stories.filter(story => story.type === "book").slice(0, 5);
+  const shortStories = stories.filter(story => story.type === "short story").slice(0, 5);
+  const articles = stories.filter(story => story.type === "article").slice(0, 5);
 
-  if (loading) {
-    return <div style={{ padding: "100px 20px", textAlign: "center", color: "white" }}>Loading library...</div>;
-  }
+  const Skeletons = () => (
+    <ul className={styles.list}>
+      {[1, 2, 3].map(n => (
+        <li key={n} className={styles.listItem}>
+          <div className={styles.skeletonTitle}></div>
+          <div className={styles.skeletonMeta}></div>
+        </li>
+      ))}
+    </ul>
+  );
 
   return (
     <motion.div 
@@ -61,53 +75,65 @@ const Writings = () => {
     >
       <motion.h1 className={styles.pageTitle} variants={itemVariants}>My Library</motion.h1>
       
-      {books.length > 0 && (
-        <motion.div className={styles.section} variants={containerVariants}>
-          <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Books</motion.h2>
+      <motion.div className={styles.section} variants={containerVariants}>
+        <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Books</motion.h2>
+        {loading ? <Skeletons /> : (
           <ul className={styles.list}>
             {books.map(story => (
               <motion.li key={story.id} className={styles.listItem} variants={itemVariants}>
-                <Link to={`/story/${story.id}`} className={styles.storyLink}>
+                <Link 
+                  to={`/story/${story.id}`} 
+                  className={styles.storyLink}
+                  onMouseEnter={() => prefetchFile(story.fileName)}
+                >
                   {story.title}
                 </Link>
                 {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
-        </motion.div>
-      )}
+        )}
+      </motion.div>
 
-      {shortStories.length > 0 && (
-        <motion.div className={styles.section} variants={containerVariants}>
-          <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Short Stories</motion.h2>
+      <motion.div className={styles.section} variants={containerVariants}>
+        <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Short Stories</motion.h2>
+        {loading ? <Skeletons /> : (
           <ul className={styles.list}>
             {shortStories.map(story => (
               <motion.li key={story.id} className={styles.listItem} variants={itemVariants}>
-                <Link to={`/story/${story.id}`} className={styles.storyLink}>
+                <Link 
+                  to={`/story/${story.id}`} 
+                  className={styles.storyLink}
+                  onMouseEnter={() => prefetchFile(story.fileName)}
+                >
                   {story.title}
                 </Link>
                 {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
-        </motion.div>
-      )}
+        )}
+      </motion.div>
 
-      {articles.length > 0 && (
-        <motion.div className={styles.section} variants={containerVariants}>
-          <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Articles</motion.h2>
+      <motion.div className={styles.section} variants={containerVariants}>
+        <motion.h2 className={styles.sectionHeading} variants={itemVariants}>Articles</motion.h2>
+        {loading ? <Skeletons /> : (
           <ul className={styles.list}>
             {articles.map(story => (
               <motion.li key={story.id} className={styles.listItem} variants={itemVariants}>
-                <Link to={`/story/${story.id}`} className={styles.storyLink}>
+                <Link 
+                  to={`/story/${story.id}`} 
+                  className={styles.storyLink}
+                  onMouseEnter={() => prefetchFile(story.fileName)}
+                >
                   {story.title}
                 </Link>
                 {story.meta && <span className={styles.metaText}>{story.meta} • {story.views || 0} views</span>}
               </motion.li>
             ))}
           </ul>
-        </motion.div>
-      )}
+        )}
+      </motion.div>
     </motion.div>
   );
 };

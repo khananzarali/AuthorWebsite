@@ -32,32 +32,54 @@ const itemVariants = {
 const Home = () => {
     const navigate = useNavigate();
     const [updatesData, setUpdatesData] = useState([]);
+    const [loadingUpdates, setLoadingUpdates] = useState(true);
+
+    // Prefetch markdown file on hover
+    const prefetchFile = (fileName) => {
+        if (fileName) {
+            fetch(fileName).catch(() => {});
+        }
+    };
 
     useEffect(() => {
         const fetchUpdates = async () => {
             try {
-                // You can add orderBy("date", "desc") if date is properly formatted, 
-                // but since they are strings like "October 12, 2026", sorting by id or fetching as is works for now.
                 const querySnapshot = await getDocs(collection(db, "updates"));
                 const updatesList = querySnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
-                // Sort by ID descending to keep newest at top
                 updatesList.sort((a, b) => b.id - a.id);
                 setUpdatesData(updatesList);
             } catch (e) {
                 console.error("Error fetching updates: ", e);
+            } finally {
+                setLoadingUpdates(false);
             }
         };
         fetchUpdates();
     }, []);
 
+    const Skeletons = () => (
+        <>
+            {[1, 2, 3].map((n) => (
+                <div key={n} className={styles.timelineItem}>
+                    <div className={styles.skeletonTimelineContent}>
+                        <div className={styles.skeletonDate}></div>
+                        <div className={styles.skeletonTitle}></div>
+                        <div className={styles.skeletonText}></div>
+                        <div className={styles.skeletonText} style={{ width: '80%' }}></div>
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+
     return (
         <motion.div initial="hidden" animate="visible" variants={containerVariants}>
             <section className={styles.heroSection}>
                 <motion.div className={styles.imageColumn} variants={itemVariants}>
-                    <img src="/bookcover.jpg" alt="Mountain Pass" />
+                    <img src="/bookcover.webp" alt="Mountain Pass" loading="lazy" />
                 </motion.div>
                 <motion.div className={styles.textColumn} variants={itemVariants}>
                     <h1>Heaven Behind The Mountain Pass</h1>
@@ -68,6 +90,7 @@ const Home = () => {
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => navigate('/story/1')}
+                        onMouseEnter={() => prefetchFile('/MountainPass.md')}
                     >
                         Learn More
                     </motion.button>
@@ -82,7 +105,7 @@ const Home = () => {
                 </motion.div>
                 
                 <div className={styles.timeline}>
-                    {updatesData.map((update, index) => (
+                    {loadingUpdates ? <Skeletons /> : updatesData.slice(0, 3).map((update, index) => (
                         <motion.div 
                             key={update.id} 
                             className={styles.timelineItem}
@@ -93,13 +116,16 @@ const Home = () => {
                                 <div className={styles.timelineDate}>{update.date}</div>
                                 
                                 <h3>
-                                    <Link to={`/update/${update.id}`} className={styles.updateLink}>
+                                    <Link 
+                                        to={`/update/${update.id}`} 
+                                        className={styles.updateLink}
+                                        onMouseEnter={() => prefetchFile(update.fileName)}
+                                    >
                                         {update.title}
                                     </Link>
                                 </h3>
                                 {update.type && <span className={styles.tag}>{update.type}</span>}
                                 <p>{update.description}</p>
-                                
                             </div>
                         </motion.div>
                     ))}

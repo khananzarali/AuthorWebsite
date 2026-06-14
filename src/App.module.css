@@ -105,3 +105,14 @@
     margin-top: 40px;
   }
 }
+
+.suspenseLoader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-family: var(--font-serif-body);
+  font-style: italic;
+  color: var(--text-medium);
+  font-size: 18px;
+}

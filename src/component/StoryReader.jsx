@@ -67,25 +67,48 @@ const StoryReader = ({ type }) => {
     fetchContent();
   }, [id, type]);
 
+  const [visibleParagraphs, setVisibleParagraphs] = useState(10); // Initially load 10 paragraphs
+
+  // ... (inside fetchContent)
+  // setContent(data.content || "");
+  // setVisibleParagraphs(10); // Reset when loading new content
+
   useEffect(() => {
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollTop;
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const scrollPercentage = (totalScroll / windowHeight) * 100;
       setProgress(scrollPercentage);
+
+      // Lazy load more paragraphs when scrolled past 70%
+      if (scrollPercentage > 70 && content) {
+        const totalParagraphs = content.split('\n\n').length;
+        if (visibleParagraphs < totalParagraphs) {
+          setVisibleParagraphs(prev => Math.min(prev + 10, totalParagraphs));
+        }
+      }
     };
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [content, visibleParagraphs]);
 
   const scrollToHeading = (e, slug) => {
     e.preventDefault();
-    const element = document.getElementById(slug);
-    if (element) {
-      const y = element.getBoundingClientRect().top + window.scrollY - 100;
-      window.scrollTo({ top: y, behavior: 'smooth' });
+    
+    // Force show all paragraphs so the heading is rendered in the DOM
+    if (content) {
+      setVisibleParagraphs(content.split('\n\n').length);
     }
+
+    // Give React a moment to render the newly visible content
+    setTimeout(() => {
+      const element = document.getElementById(slug);
+      if (element) {
+        const y = element.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 100);
   };
 
   const extractTextContent = (children) => {
@@ -109,6 +132,9 @@ const StoryReader = ({ type }) => {
       </div>
     );
   }
+
+  // Calculate visible content safely
+  const visibleText = content ? content.split('\n\n').slice(0, visibleParagraphs).join('\n\n') : "";
 
   return (
     <motion.div 
@@ -138,8 +164,13 @@ const StoryReader = ({ type }) => {
 
               <div className={styles.markdownContent}>
                 <ReactMarkdown components={customRenderers}>
-                  {content}
+                  {visibleText}
                 </ReactMarkdown>
+                {content && visibleParagraphs < content.split('\n\n').length && (
+                  <div className={styles.loadingMore}>
+                    <p style={{textAlign: "center", color: "var(--text-medium)", fontStyle: "italic"}}>Loading more pages...</p>
+                  </div>
+                )}
               </div>
             </>
           )}

@@ -70,11 +70,33 @@
 .metaText {
   font-family: var(--font-sans);
   font-size: 14px;
-  color: var(--text-light);
+  color: var(--text-medium);
   background-color: var(--bg-cream);
   padding: 4px 12px;
   border-radius: 20px;
   margin-left: 16px;
+}
+
+.skeletonTitle {
+  width: 60%;
+  height: 24px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeletonMeta {
+  width: 30%;
+  height: 14px;
+  background-color: #e0e0e0;
+  border-radius: 4px;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
 }
 
 @media (max-width: 768px) {

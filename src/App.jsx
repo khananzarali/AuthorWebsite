@@ -1,10 +1,13 @@
+import React, { Suspense } from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import Home from "./component/Home";
-import About from "./component/About";
-import Writings from "./component/Writings";
-import StoryReader from "./component/StoryReader";
-import Recommendations from "./component/Recommendations";
 import styles from "./App.module.css";
+
+// Lazy load all main components
+const Home = React.lazy(() => import("./component/Home"));
+const About = React.lazy(() => import("./component/About"));
+const Writings = React.lazy(() => import("./component/Writings"));
+const StoryReader = React.lazy(() => import("./component/StoryReader"));
+const Recommendations = React.lazy(() => import("./component/Recommendations"));
 
 const App = () => {
   return (
@@ -20,14 +23,16 @@ const App = () => {
       </header>
 
       <main className={styles.mainContent}>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/writings" element={<Writings />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/recommendations" element={<Recommendations />} />
-          <Route path="/story/:id" element={<StoryReader type="story" />} />
-          <Route path="/update/:id" element={<StoryReader type="update" />} />
-        </Routes>
+        <Suspense fallback={<div className={styles.suspenseLoader}>Loading...</div>}>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/writings" element={<Writings />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/recommendations" element={<Recommendations />} />
+            <Route path="/story/:id" element={<StoryReader type="story" />} />
+            <Route path="/update/:id" element={<StoryReader type="update" />} />
+          </Routes>
+        </Suspense>
       </main>
 <footer className={styles.footer}>
         {/* We wrap the icons in this div to control their spacing! */}
