@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
+import { getCache, setCache } from "../utils/cache";
 import styles from './css/Writings.module.css'; 
 
 const containerVariants = {
@@ -36,11 +37,20 @@ const Writings = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
+        const cachedStories = getCache("author_stories");
+        if (cachedStories) {
+          setStories(cachedStories);
+          setLoading(false);
+          return;
+        }
+
         const querySnapshot = await getDocs(collection(db, "stories"));
         const storiesList = querySnapshot.docs.map(doc => ({
           id: doc.id,
           ...doc.data()
         }));
+        
+        setCache("author_stories", storiesList, 1440);
         setStories(storiesList);
       } catch (e) {
         console.error("Error fetching stories: ", e);

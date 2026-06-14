@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { collection, getDocs, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
+import { getCache, setCache } from "../utils/cache";
 import styles from "./css/Home.module.css"; 
 
 // Animation variants
@@ -44,12 +45,20 @@ const Home = () => {
     useEffect(() => {
         const fetchUpdates = async () => {
             try {
+                const cachedUpdates = getCache("author_updates");
+                if (cachedUpdates) {
+                    setUpdatesData(cachedUpdates);
+                    setLoadingUpdates(false);
+                    return;
+                }
+
                 const querySnapshot = await getDocs(collection(db, "updates"));
                 const updatesList = querySnapshot.docs.map(doc => ({
                     id: doc.id,
                     ...doc.data()
                 }));
                 updatesList.sort((a, b) => b.id - a.id);
+                setCache("author_updates", updatesList, 1440);
                 setUpdatesData(updatesList);
             } catch (e) {
                 console.error("Error fetching updates: ", e);

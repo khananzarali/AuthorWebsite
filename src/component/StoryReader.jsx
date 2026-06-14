@@ -4,6 +4,7 @@ import ReactMarkdown from "react-markdown";
 import { motion } from "framer-motion";
 import { doc, getDoc, updateDoc, increment } from "firebase/firestore";
 import { db } from "../firebase";
+import { getCache, setCache } from "../utils/cache";
 import styles from "./css/StoryReader.module.css";
 
 const generateSlug = (text) => {
@@ -29,30 +30,50 @@ const StoryReader = ({ type }) => {
       setError(null);
       
       const collectionName = type === "story" ? "stories" : "updates";
+      const cacheKey = `author_${collectionName}_${id}`;
       const docRef = doc(db, collectionName, String(id));
       
+      const processData = (data) => {
+        setItem(data);
+        setContent(data.content || "");
+        if (data.content) {
+          const headingMatches = Array.from(data.content.matchAll(/^(#{2,3})\s+(.*?)\s*$/gm));
+          const extractedHeadings = headingMatches.map((match) => ({
+            level: match[1].length,
+            text: match[2],
+            slug: generateSlug(match[2])
+          }));
+          setHeadings(extractedHeadings);
+        }
+      };
+
       try {
+        // Increment views in the background (write only, no read cost)
+        updateDoc(docRef, { views: increment(1) }).catch(console.error);
+
+        // 1. Check if individual item is cached
+        let cachedData = getCache(cacheKey);
+        
+        // 2. If not, check if it's in the collection cache (from Writings or Home)
+        if (!cachedData) {
+          const collectionCache = getCache(`author_${collectionName}`);
+          if (collectionCache) {
+            cachedData = collectionCache.find(item => item.id === String(id));
+          }
+        }
+
+        if (cachedData) {
+          processData(cachedData);
+          setLoading(false);
+          return;
+        }
+
+        // 3. Fallback: Fetch from Firebase
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
-          setItem(data);
-          setContent(data.content || "");
-          
-          // Increment views
-          await updateDoc(docRef, {
-            views: increment(1)
-          });
-
-          // Extract headings for sidebar
-          if (data.content) {
-            const headingMatches = Array.from(data.content.matchAll(/^(#{2,3})\s+(.*?)\s*$/gm));
-            const extractedHeadings = headingMatches.map((match) => ({
-              level: match[1].length,
-              text: match[2],
-              slug: generateSlug(match[2])
-            }));
-            setHeadings(extractedHeadings);
-          }
+          processData(data);
+          setCache(cacheKey, data, 1440);
         } else {
           setError(`This ${type} could not be found.`);
         }
